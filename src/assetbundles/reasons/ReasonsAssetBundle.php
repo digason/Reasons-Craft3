@@ -40,8 +40,7 @@ class ReasonsAssetBundle extends AssetBundle
     /**
      * @inheritdoc
      */
-    public function init()
-    {
+    public function init(): void  {
         $this->sourcePath = '@mmikkel/reasons/assetbundles/reasons/dist';
 
         $this->depends = [
@@ -65,8 +64,7 @@ class ReasonsAssetBundle extends AssetBundle
     /**
      * @inheritdoc
      */
-    public function registerAssetFiles($view)
-    {
+    public function registerAssetFiles($view) {
         parent::registerAssetFiles($view);
 
         $data = Reasons::getInstance()->reasons->getData();

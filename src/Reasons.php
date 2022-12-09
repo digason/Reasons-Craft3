@@ -16,6 +16,8 @@ use mmikkel\reasons\services\ReasonsService;
 
 use Craft;
 use craft\base\Plugin;
+use craft\base\Element;
+use craft\base\Field;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
@@ -26,9 +28,14 @@ use craft\events\ConfigEvent;
 use craft\events\FieldLayoutEvent;
 use craft\events\PluginEvent;
 use craft\events\TemplateEvent;
+use craft\events\RegisterElementHtmlAttributesEvent;
+use craft\events\DefineFieldHtmlEvent;
+use craft\events\DefineMetadataEvent;
+use craft\events\DefineHtmlEvent;
 use craft\services\Fields;
 use craft\services\Plugins;
 use craft\services\ProjectConfig;
+use craft\helpers\Html;
 use craft\web\View;
 
 use yii\base\Event;
@@ -49,17 +56,17 @@ class Reasons extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '2.1.1';
+    public string $schemaVersion = '2.1.1';
 
     /**
      * @var bool
      */
-    public $hasCpSettings = false;
+    public bool $hasCpSettings = false;
 
     /**
      * @var bool
      */
-    public $hasCpSection = false;
+    public bool $hasCpSection = false;
 
     // Public Methods
     // =========================================================================
@@ -67,8 +74,7 @@ class Reasons extends Plugin
     /**
      * @inheritdoc
      */
-    public function init()
-    {
+    public function init():void {
         parent::init();
 
         $this->setComponents([
@@ -174,6 +180,41 @@ class Reasons extends Plugin
             [$this, 'initReasons']
         );
 
+        Event::on (
+            // Element::class, Element::EVENT_DEFINE_META_FIELDS_HTML, function (DefineHtmlEvent &$event) {
+            Element::class, Element::EVENT_DEFINE_METADATA, function (DefineMetadataEvent &$event) {
+                if (!isset($event->sender->id) && !isset($event->sender->sectionId) && !isset($event->sender->typeId)) {
+                    return;
+                }
+
+                $sectionTag = Html::tag('span', $event->sender->section->name, [
+                    'data' => [
+                        'section-id' => $event->sender->sectionId
+                    ],
+                    'aria' => ['hidden' => 'true'],
+                ]);
+
+                $typeTag = Html::tag('span', $event->sender->type->name, [
+                    'data' => [
+                        'type-id' => $event->sender->typeId
+                    ],
+                    'aria' => ['hidden' => 'true'],
+                ]);
+
+                $sectionInput = Html::hiddenInput('sectionId', $event->sender->sectionId);
+                $typeInput = Html::hiddenInput('typeId', $event->sender->typeId);
+
+                $event->metadata['Section'] = $sectionTag . $sectionInput;
+                $event->metadata['Type'] = $typeTag . $typeInput;
+
+                if (getenv('ENVIRONMENT') === 'dev') {
+                    $prefix = str_replace('\\', '-', get_class($event->sender));
+                    $output = $event;
+                    //$output = array_keys(get_object_vars($event));
+                    //file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/assets/' . $prefix . '-Event-' . time() . '.txt', print_r($output, TRUE));
+                }
+            }
+        );
     }
 
     /**

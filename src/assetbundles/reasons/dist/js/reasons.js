@@ -25,6 +25,7 @@
         CATEGORY_GROUP_SAVE_ACTION: 'categories/save-group',
         GLOBAL_SET_CONTENT_SAVE_ACTION: 'globals/save-content',
         GLOBAL_SET_SAVE_ACTION: 'globals/save-set',
+        ELEMENT_SAVE_ACTION: 'elements/save',
         ENTRY_SAVE_ACTION: 'entries/save-entry',
         DRAFT_SAVE_ACTION: 'entry-revisions/save-draft',
         DRAFT_PUBLISH_ACTION: 'entry-revisions/publish-draft',
@@ -250,6 +251,7 @@
                     idInputSelector = 'input[type="hidden"][name="setId"]';
                     break;
 
+                case this.ELEMENT_SAVE_ACTION :
                 case this.ENTRY_SAVE_ACTION :
                 case this.DRAFT_SAVE_ACTION :
                 case this.DRAFT_PUBLISH_ACTION :
@@ -303,6 +305,7 @@
 
                 case this.ASSET_SAVE_ACTION :
                 case this.GLOBAL_SET_CONTENT_SAVE_ACTION :
+                case this.ELEMENT_SAVE_ACTION :
                 case this.ENTRY_SAVE_ACTION :
                 case this.DRAFT_SAVE_ACTION :
                 case this.DRAFT_PUBLISH_ACTION :
