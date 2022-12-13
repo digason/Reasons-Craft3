@@ -84,7 +84,7 @@ class Reasons extends Plugin
         Event::on(
             Plugins::class,
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
+            function (PluginEvent &$event) {
                 if ($event->plugin === $this) {
                     $this->reasons->clearCache();
                 }
@@ -94,7 +94,7 @@ class Reasons extends Plugin
         Event::on(
             Plugins::class,
             Plugins::EVENT_AFTER_UNINSTALL_PLUGIN,
-            function (PluginEvent $event) {
+            function (PluginEvent &$event) {
                 if ($event->plugin === $this) {
                     $this->reasons->clearCache();
                     Craft::$app->getProjectConfig()->remove('reasons_conditionals');
@@ -106,7 +106,7 @@ class Reasons extends Plugin
         Event::on(
             Fields::class,
             Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT,
-            function (FieldLayoutEvent $event) {
+            function (FieldLayoutEvent &$event) {
                 if (Craft::$app->getRequest()->getIsConsoleRequest()) {
                     return;
                 }
@@ -137,7 +137,7 @@ class Reasons extends Plugin
         Event::on(
             Fields::class,
             Fields::EVENT_AFTER_DELETE_FIELD_LAYOUT,
-            function (FieldLayoutEvent $event) {
+            function (FieldLayoutEvent &$event) {
                 $fieldLayout = $event->layout;
                 if (!$fieldLayout) {
                     return;
@@ -182,7 +182,7 @@ class Reasons extends Plugin
 
         Event::on (
             // Element::class, Element::EVENT_DEFINE_META_FIELDS_HTML, function (DefineHtmlEvent &$event) {
-            Element::class, Element::EVENT_DEFINE_METADATA, function (DefineMetadataEvent &$event) {
+            Element::class, Element::EVENT_DEFINE_METADATA, function (DefineMetadataEvent $event) {
                 if (!isset($event->sender->id) && !isset($event->sender->sectionId) && !isset($event->sender->typeId)) {
                     return;
                 }

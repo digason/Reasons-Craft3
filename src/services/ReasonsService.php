@@ -137,7 +137,7 @@ class ReasonsService extends Component
      * @throws \Throwable
      * @throws \yii\db\Exception
      */
-    public function onProjectConfigChange(ConfigEvent $event)
+    public function onProjectConfigChange(ConfigEvent &$event)
     {
 
         $this->clearCache();
@@ -206,7 +206,7 @@ class ReasonsService extends Component
      * @throws \Throwable
      * @throws \yii\db\Exception
      */
-    public function onProjectConfigDelete(ConfigEvent $event)
+    public function onProjectConfigDelete(ConfigEvent &$event)
     {
 
         $this->clearCache();
