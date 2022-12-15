@@ -183,7 +183,7 @@ class Reasons extends Plugin
         Event::on (
             // Element::class, Element::EVENT_DEFINE_META_FIELDS_HTML, function (DefineHtmlEvent &$event) {
             Element::class, Element::EVENT_DEFINE_METADATA, function (DefineMetadataEvent $event) {
-                if (!isset($event->sender->id) && !isset($event->sender->sectionId) && !isset($event->sender->typeId)) {
+                if (!isset($event->sender->id) || !isset($event->sender->sectionId) || !isset($event->sender->typeId)) {
                     return;
                 }
 
